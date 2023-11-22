@@ -1,0 +1,7 @@
+[32m2023-11-21 16:11:02 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - 144260 - LOGS_CAPTURED - Started capturing logs in process (pid: 144260).
+[32m2023-11-21 16:11:02 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - 144260 - locations - STEP_START - Started execution of step "locations".
+[32m2023-11-21 16:11:05 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - 144260 - locations - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+[32m2023-11-21 16:11:05 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - locations - Writing file at: /home/flemm0/clash_royale_etl_project/tmp9zs9h601/storage/locations using PickledObjectFilesystemIOManager...
+[32m2023-11-21 16:11:05 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - 144260 - locations - ASSET_MATERIALIZATION - Materialized value locations.
+[32m2023-11-21 16:11:05 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - 144260 - locations - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+[32m2023-11-21 16:11:05 -0800[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 4095e712-f3a7-47ba-94d9-145396295bdb - 144260 - locations - STEP_SUCCESS - Finished execution of step "locations" in 2.77s.
