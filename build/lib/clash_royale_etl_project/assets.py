@@ -4,13 +4,17 @@ from dotenv import load_dotenv
 import json
 import duckdb
 import polars as pl
+from sys import platform
 
 from dagster import asset, Definitions
 from dagster_duckdb import DuckDBResource
 
 load_dotenv()
 
-api_key = os.getenv('API_TOKEN')
+if platform == 'linux' or platform == 'linux2':
+    api_key = os.getenv('PC_CR_API_TOKEN')
+elif platform == 'darwin':
+    api_key = os.getenv('MAC_CR_API_TOKEN')
 motherduck_token = os.getenv('MOTHERDUCK_TOKEN')
 headers = {'Authorization': f'Bearer {api_key}'}
 
@@ -21,7 +25,7 @@ def locations():
     items = response['items']
     df = pl.DataFrame(items)
     con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
-    con.execute('CREATE OR REPLACE TABLE stg_locations AS SELECT * FROM df')
+    con.execute('CREATE TABLE IF NOT EXISTS stg_locations AS SELECT * FROM df')
 
 @asset
 def card_info():
@@ -30,29 +34,7 @@ def card_info():
     items = response['items']
     df = pl.DataFrame(items)
     con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
-    con.execute('CREATE OR REPLACE TABLE stg_cards AS SELECT * from df')
-
-@asset
-def season_rankings():
-    seasons_url = 'https://api.clashroyale.com/v1/locations/global/seasons'
-    seasons = requests.get(seasons_url, headers).json()
-    data = None
-    for season in seasons['items']:
-        season_id = season['id']
-        rankings_url = f'https://api.clashroyale.com/v1/locations/global/seasons/{season_id}/rankings/players'
-        response = requests.get(rankings_url, headers).json()
-        if 'items' in response.keys():
-            items = response['items']
-            df = pl.DataFrame(items)
-            df = df.rename({'tag': 'player_tag', 'name': 'player_name'}).unnest('clan')
-            df = df.rename({'tag': 'clan_tag', 'name': 'clan_name'})
-            df = df.with_columns(pl.lit(season_id).alias('season_id'))
-            if data is None:
-                data = df
-            else:
-                data = pl.concat([data, df])
-    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
-    con.execute('CREATE OR REPLACE TABLE stg_season_leaderboards AS SELECT * FROM data')
+    con.execute('CREATE TABLE IF NOT EXISTS stg_cards AS SELECT * from df')
 
 # configure DuckDB resource
 defs = Definitions(
