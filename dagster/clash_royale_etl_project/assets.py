@@ -18,9 +18,12 @@ headers = {'Authorization': f'Bearer {api_key}'}
 def locations() -> None:
     '''Extracts and loads Clash Royale location data from API'''
     locations_url = 'https://api.clashroyale.com/v1/locations'
-    response = requests.get(url=locations_url, headers=headers).json()
-    items = response['items']
-    df = pl.DataFrame(items)
+    response = requests.get(url=locations_url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            items = response['items']
+            df = pl.DataFrame(items)
     con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
     con.execute('CREATE OR REPLACE TABLE stg_locations AS SELECT * FROM df')
 
@@ -28,23 +31,33 @@ def locations() -> None:
 def card_info() -> None:
     '''Extracts and loads Clash Royale card information from API'''
     card_url = 'https://api.clashroyale.com/v1/cards'
-    response = requests.get(url=card_url, headers=headers).json()
-    items = response['items']
-    df = pl.DataFrame(items)
+    response = requests.get(url=card_url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            items = response['items']
+            df = pl.DataFrame(items)
     con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
     con.execute('CREATE OR REPLACE TABLE stg_cards AS SELECT * from df')
 
 @asset
 def season_rankings() -> list:
     '''Extracts and loads top players from each Clash Royale season'''
+    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
+    con.execute('''
+        CREATE TABLE IF NOT EXISTS stg_season_leaderboards(
+            
+        )
+    ''')
     seasons_url = 'https://api.clashroyale.com/v1/locations/global/seasons'
     seasons = requests.get(seasons_url, headers).json()
     data = None
     for season in seasons['items']:
         season_id = season['id']
         rankings_url = f'https://api.clashroyale.com/v1/locations/global/seasons/{season_id}/rankings/players'
-        response = requests.get(rankings_url, headers).json()
-        if 'items' in response.keys():
+        response = requests.get(rankings_url, headers)
+        data = response.json()
+        if 'items' in data.keys():
             items = response['items']
             df = pl.DataFrame(items)
             df = df.rename({'tag': 'player_tag', 'name': 'player_name'}).unnest('clan')
@@ -54,7 +67,7 @@ def season_rankings() -> list:
                 data = df
             else:
                 data = pl.concat([data, df])
-    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
+    
     con.execute('CREATE OR REPLACE TABLE stg_season_leaderboards AS SELECT * FROM data')
 
     return data['player_tag'].to_list()
