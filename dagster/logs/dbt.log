@@ -1,0 +1,42 @@
+[0m15:43:56.092360 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f467347fe90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4673488150>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4673489610>]}
+
+
+============================== 15:43:56.100767 | b2067a43-e753-48c7-ae07-f543379cd863 ==============================
+[0m15:43:56.100767 [info ] [MainThread]: Running with dbt=1.7.2
+[0m15:43:56.101248 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/home/flemm0/.dbt', 'log_path': 'logs', 'debug': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'invocation_command': 'dbt init clash_royale_etl_project', 'static_parser': 'True', 'introspect': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m15:43:56.101649 [warn ] [MainThread]: [ConfigFolderDirectory]: Unable to parse dict {'dir': PosixPath('/home/flemm0/.dbt')}
+[0m15:43:56.101989 [info ] [MainThread]: Creating dbt configuration folder at 
+[0m15:43:56.102839 [info ] [MainThread]: A project called clash_royale_etl_project already exists here.
+[0m15:43:56.104090 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 0.013336808, "process_user_time": 1.301804, "process_kernel_time": 0.420583, "process_mem_max_rss": "99080", "process_in_blocks": "1032", "process_out_blocks": "8"}
+[0m15:43:56.104523 [debug] [MainThread]: Command `dbt init` succeeded at 15:43:56.104406 after 0.01 seconds
+[0m15:43:56.104833 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f467349bed0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4677d5c810>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4677d5c590>]}
+[0m15:43:56.105150 [debug] [MainThread]: Flushing usage events
+[0m15:51:34.630074 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fadd99d0150>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fadd99d0490>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fadd99d0390>]}
+
+
+============================== 15:51:34.632469 | 2b1d649c-d8a4-4937-90dd-a9bcc23bd9c3 ==============================
+[0m15:51:34.632469 [info ] [MainThread]: Running with dbt=1.7.2
+[0m15:51:34.632953 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/home/flemm0/.dbt', 'debug': 'False', 'version_check': 'True', 'log_path': 'logs', 'warn_error': 'None', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'static_parser': 'True', 'log_format': 'default', 'target_path': 'None', 'invocation_command': 'dbt init cr-dbt', 'send_anonymous_usage_stats': 'True'}
+[0m15:51:44.914742 [debug] [MainThread]: Starter project path: /home/flemm0/miniconda3/envs/cr_proj/lib/python3.11/site-packages/dbt/include/starter_project
+[0m15:51:44.919737 [info ] [MainThread]: 
+Your new dbt project "cr_dbt_project" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m15:51:44.920191 [info ] [MainThread]: Setting up your profile.
+[0m15:51:49.663991 [info ] [MainThread]: Profile cr_dbt_project written to /home/flemm0/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m15:51:49.664799 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 15.036338, "process_user_time": 1.348432, "process_kernel_time": 0.090114, "process_mem_max_rss": "129104", "process_out_blocks": "80", "process_in_blocks": "0"}
+[0m15:51:49.665251 [debug] [MainThread]: Command `dbt init` succeeded at 15:51:49.665141 after 15.04 seconds
+[0m15:51:49.665574 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7faddb3a3210>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fadd99df450>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fadde307910>]}
+[0m15:51:49.665923 [debug] [MainThread]: Flushing usage events

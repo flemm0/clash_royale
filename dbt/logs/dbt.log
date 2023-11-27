@@ -1,0 +1,31 @@
+[0m18:44:24.438242 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d823190>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d82cbd0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d82d510>]}
+
+
+============================== 18:44:24.488796 | 44ac12e2-ce84-4a46-aacf-88a499f8943a ==============================
+[0m18:44:24.488796 [info ] [MainThread]: Running with dbt=1.7.2
+[0m18:44:24.490296 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/Users/candicewu/.dbt', 'log_path': 'logs', 'debug': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt init clash_royale', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m18:44:24.491928 [warn ] [MainThread]: [ConfigFolderDirectory]: Unable to parse dict {'dir': PosixPath('/Users/candicewu/.dbt')}
+[0m18:44:24.493275 [info ] [MainThread]: Creating dbt configuration folder at 
+[0m18:44:24.497011 [debug] [MainThread]: Starter project path: /usr/local/Caskroom/mambaforge/base/envs/cr_proj/lib/python3.11/site-packages/dbt/include/starter_project
+[0m18:44:24.727406 [info ] [MainThread]: 
+Your new dbt project "clash_royale" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m18:44:24.730153 [info ] [MainThread]: Setting up your profile.
+[0m18:44:33.761326 [info ] [MainThread]: Profile clash_royale written to /Users/candicewu/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m18:44:34.080437 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 9.701572, "process_user_time": 3.992998, "process_kernel_time": 1.061255, "process_mem_max_rss": "103485440", "process_in_blocks": "0", "process_out_blocks": "0"}
+[0m18:44:34.082266 [debug] [MainThread]: Command `dbt init` succeeded at 18:44:34.081656 after 9.70 seconds
+[0m18:44:34.083435 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10916b3d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d847b90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d846c10>]}
+[0m18:44:34.084652 [debug] [MainThread]: Flushing usage events

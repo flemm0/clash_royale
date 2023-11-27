@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+clash_royale_etl_project/__init__.py
+clash_royale_etl_project/assets.py
+clash_royale_etl_project/motherduck.py
+clash_royale_etl_project.egg-info/PKG-INFO
+clash_royale_etl_project.egg-info/SOURCES.txt
+clash_royale_etl_project.egg-info/dependency_links.txt
+clash_royale_etl_project.egg-info/requires.txt
+clash_royale_etl_project.egg-info/top_level.txt

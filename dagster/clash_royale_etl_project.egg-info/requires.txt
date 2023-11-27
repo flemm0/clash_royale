@@ -1,0 +1,12 @@
+dagster==1.5.9
+dbt-duckdb==1.7.0
+python-dotenv
+polars
+pyarrow==14.0.1
+dagster-duckdb
+dagster
+dagster-cloud
+
+[dev]
+dagster-webserver
+pytest
