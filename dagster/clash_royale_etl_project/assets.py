@@ -22,7 +22,7 @@ def locations() -> None:
     if response.status_code == 200:
         data = response.json()
         if data:
-            items = response['items']
+            items = data['items']
             df = pl.DataFrame(items)
     con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
     con.execute('CREATE OR REPLACE TABLE stg_locations AS SELECT * FROM df')
@@ -35,7 +35,7 @@ def card_info() -> None:
     if response.status_code == 200:
         data = response.json()
         if data:
-            items = response['items']
+            items = data['items']
             df = pl.DataFrame(items)
     con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
     con.execute('CREATE OR REPLACE TABLE stg_cards AS SELECT * from df')
@@ -43,39 +43,69 @@ def card_info() -> None:
 @asset
 def season_rankings() -> list:
     '''Extracts and loads top players from each Clash Royale season'''
-    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
-    con.execute('''
-        CREATE TABLE IF NOT EXISTS stg_season_leaderboards(
-            
-        )
-    ''')
     seasons_url = 'https://api.clashroyale.com/v1/locations/global/seasons'
-    seasons = requests.get(seasons_url, headers).json()
-    data = None
-    for season in seasons['items']:
+    seasons_data = requests.get(seasons_url, headers).json()
+    tbl = None
+    for season in seasons_data['items']:
         season_id = season['id']
         rankings_url = f'https://api.clashroyale.com/v1/locations/global/seasons/{season_id}/rankings/players'
         response = requests.get(rankings_url, headers)
         data = response.json()
         if 'items' in data.keys():
-            items = response['items']
+            items = data['items']
             df = pl.DataFrame(items)
             df = df.rename({'tag': 'player_tag', 'name': 'player_name'}).unnest('clan')
             df = df.rename({'tag': 'clan_tag', 'name': 'clan_name'})
             df = df.with_columns(pl.lit(season_id).alias('season_id'))
-            if data is None:
-                data = df
+            if tbl is None:
+                tbl = df
             else:
-                data = pl.concat([data, df])
-    
-    con.execute('CREATE OR REPLACE TABLE stg_season_leaderboards AS SELECT * FROM data')
+                tbl = pl.concat([tbl, df])
 
-    return data['player_tag'].to_list()
+    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
+    con.execute('CREATE OR REPLACE TABLE stg_season_leaderboards AS SELECT * FROM tbl')
+
+    return tbl['player_tag'].to_list()
 
 @asset
 def player_data(season_rankings: list):
     '''Takes in player tags from `season_rankings()` and extracts player data from API'''
-    tbl = None
+    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
+    create_table_query = '''
+        CREATE TABLE IF NOT EXISTS stg_player_data(
+            tag VARCHAR(50) PRIMARY KEY,
+            name VARCHAR(50),
+            expLevel INTEGER,
+            trophies INTEGER,
+            bestTrophies INTEGER,
+            wins INTEGER,
+            losses INTEGER,
+            battleCount INTEGER,
+            threeCrownWins INTEGER,
+            challengeCardsWon INTEGER,
+            challengeMaxWins INTEGER,
+            tournamentCardsWon INTEGER,
+            tournamentBattleCount INTEGER,
+            role VARCHAR(50),
+            donations INTEGER,
+            donationsReceived INTEGER,
+            totalDonations INTEGER,
+            warDayWins INTEGER,
+            clanTag VARCHAR(50),
+            arenaName VARCHAR(50),
+            currentSeasonTrophies INTEGER,
+            currentSeasonTrophiesBest INTEGER,
+            bestSeasonId VARCHAR(50),
+            bestSeasonTrophies VARCHAR(50),
+            currentFavoriteCard VARCHAR(20)
+        );
+    '''
+    con.execute(query=create_table_query)
+
+    cursor = con.cursor()
+    cursor.execute('SELECT tag FROM stg_player_data')
+    existing_players = {row[0] for row in cursor.fetchall()}
+
     cols = [
         'tag',
         'name',
@@ -96,7 +126,7 @@ def player_data(season_rankings: list):
         'totalDonations',
         'warDayWins'
     ]
-    for player_tag in season_rankings:
+    for player_tag in set(season_rankings).difference(existing_players):
         formatted_tag = player_tag.replace('#', '%23')
         player_url = f'https://api.clashroyale.com/v1/players/{formatted_tag}'
         response = requests.get(player_url, headers)
@@ -104,37 +134,37 @@ def player_data(season_rankings: list):
             data = response.json()
             filtered_data = {k: v for k, v in data.items() if k in cols}
             try:
-                filtered_data['clan_tag'] = data['clan']['tag']
+                filtered_data['clanTag'] = data['clan']['tag']
             except KeyError:
-                filtered_data['clan_tag'] = None
-            filtered_data['arena_name'] = data['arena']['name']
+                filtered_data['clanTag'] = None
+            filtered_data['arenaName'] = data['arena']['name']
             try:
-                filtered_data['current_season_trophies'] = data['leagueStatistics']['currentSeason']['trophies']
+                filtered_data['currentSeasonTrophies'] = data['leagueStatistics']['currentSeason']['trophies']
             except KeyError:
-                filtered_data['current_season_trophies'] = None
+                filtered_data['currentSeasonTrophies'] = None
             try:
-                filtered_data['current_season_trophies_best'] = data['leagueStatistics']['currentSeason']['bestTrophies']
+                filtered_data['currentSeasonTrophiesBest'] = data['leagueStatistics']['currentSeason']['bestTrophies']
             except KeyError:
-                filtered_data['current_season_trophies_best'] = None
+                filtered_data['currentSeasonTrophiesBest'] = None
             try:
-                filtered_data['best_season_id'] = data['leagueStatistics']['bestSeason']['id']
+                filtered_data['bestSeasonId'] = data['leagueStatistics']['bestSeason']['id']
             except KeyError:
-                filtered_data['best_season_id'] = None
+                filtered_data['bestSeasonId'] = None
             try:
-                filtered_data['best_season_trophies'] = data['leagueStatistics']['bestSeason']['trophies']
+                filtered_data['bestSeasonTrophies'] = data['leagueStatistics']['bestSeason']['trophies']
             except KeyError:
-                filtered_data['best_season_trophies'] = None
+                filtered_data['bestSeasonTrophies'] = None
             try:
-                filtered_data['current_favorite_card'] = data['currentFavouriteCard']['name']
+                filtered_data['currentFavoriteCard'] = data['currentFavouriteCard']['name']
             except KeyError:
-                filtered_data['current_favorite_card'] = None
-            df = pl.DataFrame(filtered_data)
-            if tbl is None:
-                tbl = df
-            else:
-                tbl = pl.concat([tbl, df], how='diagonal_relaxed')
-    con = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
-    con.execute('CREATE OR REPLACE TABLE stg_player_data AS SELECT * FROM tbl')
+                filtered_data['currentFavoriteCard'] = None
+            # generate placeholders for query parameters 
+            placeholders = ','.join('?' * len(filtered_data))
+            insert_query = f'''
+                INSERT INTO stg_player_data ({','.join(filtered_data.keys())})
+                VALUES ({placeholders})
+            '''
+            con.execute(insert_query, list(filtered_data.values()))
 
 def unnest_all(df: pl.DataFrame, seperator="_"):
     def _unnest_all(struct_columns):
