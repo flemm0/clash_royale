@@ -1,0 +1,80 @@
+---
+title: Clash Royale Data Model
+---
+
+erDiagram
+
+    battle_fct {
+        string battle_id PK
+        datetime battle_time FK
+        integer arena_id FK
+        integer game_mode_id FK
+        string winner_id FK
+        string loser_id FK
+        integer winner_starting_trophies
+        integer winner_trophies_gained
+        integer winner_crowns
+        integer loser_starting_trophies
+        integer loser_trophies_lost
+        integer loser_crowns
+    }
+
+    player_dim {
+        string player_tag FK
+        string clan_tag FK
+        string clan_badge_id FK
+    }
+
+    date_dim {
+        year year
+        month month
+        day day
+        timestamp timestamp
+    }
+    
+    battle_cards_bridge {
+        string battle_id FK
+        string player_tag FK
+        integer card1_id FK
+        integer card2_id FK
+        integer card3_id FK
+        integer card4_id FK
+        integer card5_id FK
+        integer card6_id FK
+        integer card7_id FK
+        integer card8_id FK
+        integer card1_level FK
+        integer card2_level FK
+        integer card3_level FK
+        integer card4_level FK
+        integer card5_level FK
+        integer card6_level FK
+        integer card7_level FK
+        integer card8_level FK
+    }
+
+    cards_dim {
+        integer card_id FK
+        string name
+        int max_level
+        int max_evolution_level
+        int elixir_cost
+    }
+
+    clan_dim {
+        string clan_tag FK
+        string clan_name
+        string type
+        integer required_trophies
+        integer location_id
+        string location_name
+        boolean is_country
+    }
+
+    battle_fct ||--|{ player_dim : ""
+    battle_fct ||--|{ date_dim : ""
+    battle_fct ||--|{ clan_dim : ""
+    battle_fct ||--|| battle_cards_bridge : ""
+    cards_dim }|--|| battle_cards_bridge : ""
+    player_dim ||--|{ battle_cards_bridge : ""
+    
