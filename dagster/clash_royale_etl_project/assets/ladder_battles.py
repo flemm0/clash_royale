@@ -1,12 +1,14 @@
 from . import constants
 from dagster import asset
+from dagster_duckdb import DuckDBResource
 import os
 from kaggle.api.kaggle_api_extended import KaggleApi
 import shutil
 import pyarrow as pa
 import pyarrow.csv as csv
 import pyarrow.parquet as pq
-import duckdb
+import re
+from datetime import datetime
 
 os.environ['KAGGLE_CONFIG_DIR'] = constants.KAGGLE_CONFIG_DIR
 
@@ -61,16 +63,25 @@ def raw_parquet_battle_data():
         except Exception as e:
             print(f'Failed to delete {path}: {e}')
 
+def extract_date(dir):
+    '''Extracts dates from directory of dated parquet files. Used for creating raw table name with range of dates.'''
+    dates = []
+    for file in os.listdir(dir):
+        dates.append([datetime.strptime(date, '%m%d%Y') for date in re.findall(r'\d+', file)])
+    dates = [date for sublist in dates for date in (sublist if isinstance(sublist, list) else [sublist])]
+    return f"{datetime.strftime(min(dates), '%m%d%Y')}_{datetime.strftime(max(dates), '%m%d%Y')}"
+
 @asset(
     deps=['raw_parquet_battle_data']
 )
-def raw_battle_data_table():
-    '''Upload raw player vs. player data into Motherduck table'''
-    conn = duckdb.connect(f'md:clash_royale?motherduck_token={motherduck_token}')
+def raw_battle_data_table(database: DuckDBResource):
+    '''Upload raw player vs. player data into Motherduck table.'''
+    table_name = f'raw_battles_{extract_date(constants.PARQUET_DATA_PATH)}'
     query = f'''
-        CREATE OR REPLACE TABLE raw_battles_12072020_01032021 
+        CREATE OR REPLACE TABLE {table_name} 
         AS (
             SELECT * FROM "{constants.PARQUET_DATA_PATH}/*.parquet"
         );
     '''
-    conn.execute(query=query)
+    with database.get_connection() as conn:
+        conn.execute(query=query)
