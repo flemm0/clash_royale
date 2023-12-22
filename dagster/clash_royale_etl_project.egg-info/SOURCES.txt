@@ -3,10 +3,14 @@ pyproject.toml
 setup.cfg
 setup.py
 clash_royale_etl_project/__init__.py
-clash_royale_etl_project/assets.py
-clash_royale_etl_project/motherduck.py
 clash_royale_etl_project.egg-info/PKG-INFO
 clash_royale_etl_project.egg-info/SOURCES.txt
 clash_royale_etl_project.egg-info/dependency_links.txt
 clash_royale_etl_project.egg-info/requires.txt
 clash_royale_etl_project.egg-info/top_level.txt
+clash_royale_etl_project/assets/__init__.py
+clash_royale_etl_project/assets/api.py
+clash_royale_etl_project/assets/constants.py
+clash_royale_etl_project/assets/kaggle_asset.py
+clash_royale_etl_project/assets/kaggle_data.py
+clash_royale_etl_project/resources/__init__.py
