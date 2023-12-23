@@ -38,6 +38,6 @@ models:
 
 # add sources
 sources:
-  - name: clash_royale
+  - name: raw_battles
   tables:
     - raw_battles_12072020_01032021
