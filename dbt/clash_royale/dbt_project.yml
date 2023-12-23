@@ -35,3 +35,9 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+
+# add sources
+sources:
+  - name: clash_royale
+  tables:
+    - raw_battles_12072020_01032021
