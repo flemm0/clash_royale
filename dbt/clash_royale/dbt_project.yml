@@ -35,9 +35,5 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
-
-# add sources
-sources:
-  - name: raw_battles
-  tables:
-    - raw_battles_12072020_01032021
+    warehouse:
+      +materialized: table

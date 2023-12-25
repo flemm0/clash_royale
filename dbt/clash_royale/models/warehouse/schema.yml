@@ -1,0 +1,16 @@
+version: 2
+
+sources: 
+  - name: clash_royale
+    description: 'Database holding all raw and transformed tables in Clash Royale project'
+    database: clash_royale
+    schema: main
+    tables:
+      - name: raw_battles_12072020_01042021
+        description: 'A table containing raw player vs player battle data grabbed from Kaggle'
+      - name: stg_cards
+        description: 'Staging table containing information on cards in Clash Royale'
+
+models:
+  - name: date_dim
+    description: 'A date dimension'
