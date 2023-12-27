@@ -12,5 +12,10 @@ sources:
         description: 'Staging table containing information on cards in Clash Royale'
 
 models:
+  - name: stg_battles
+    description: 'Renamed and card information transformation applied to raw battles table'
+    constraints:
+    - type: primary key
+      columns: [battle_time, winner_tag, loser_tag]
   - name: date_dim
     description: 'A date dimension'

@@ -1,0 +1,63 @@
+WITH staging_battles AS (
+    SELECT
+        HASH(CONCAT(strftime(battleTime, '%Y%m%d%H%M%S'), "winner.tag", "loser.tag")) AS battle_id,
+        "battleTime" AS battle_time,
+        "arena.id" AS arena_id,
+        "gameMode.id" AS game_mode_id,
+        "winner.tag" AS winner_tag,
+        "winner.startingTrophies" AS winner_starting_trophies,
+        "winner.trophyChange" AS winner_trophy_change,
+        "winner.crowns" as winner_crowns,
+        "winner.kingTowerHitPoints" AS winner_king_tower_hit_points,
+        "winner.princessTowersHitPoints" AS winner_princess_tower_hit_points,
+        "winner.clan.tag" AS winner_clan_tag,
+        "winner.clan.badgeId" AS winner_clan_badge_id,
+        "loser.tag" AS loser_tag,
+        "loser.startingTrophies" AS loser_starting_trophies,
+        "loser.trophyChange" AS loser_trophy_change,
+        "loser.crowns" AS loser_crowns,
+        "loser.kingTowerHitPoints" AS loser_king_tower_hit_points,
+        "loser.princessTowersHitPoints" AS loser_princess_tower_hit_points,
+        "loser.clan.tag" AS loser_clan_tag,
+        "loser.clan.badgeId" AS loser_clan_badge_id,
+        "tournamentTag" AS tournament_tag,
+        ARRAY[
+            MAP {"winner.card1.id": "winner.card1.level"},
+            MAP {"winner.card2.id": "winner.card2.level"},
+            MAP {"winner.card3.id": "winner.card3.level"},
+            MAP {"winner.card4.id": "winner.card4.level"},
+            MAP {"winner.card5.id": "winner.card5.level"},
+            MAP {"winner.card6.id": "winner.card6.level"},
+            MAP {"winner.card7.id": "winner.card7.level"},
+            MAP {"winner.card8.id": "winner.card8.level"}
+        ] AS winner_cards,
+        "winner.troop.count" AS winner_troop_count,
+        "winner.structure.count" AS winner_structure_count,
+        "winner.spell.count" AS winner_spell_count,
+        "winner.common.count" AS winner_common_count,
+        "winner.rare.count" AS winner_rare_count,
+        "winner.epic.count" AS winner_epic_count,
+        "winner.legendary.count" AS winner_legendary_count,
+        "winner.elixir.average" AS winner_average_elixir,
+        ARRAY[
+            MAP {"loser.card1.id": "loser.card1.level"},
+            MAP {"loser.card2.id": "loser.card2.level"},
+            MAP {"loser.card3.id": "loser.card3.level"},
+            MAP {"loser.card4.id": "loser.card4.level"},
+            MAP {"loser.card5.id": "loser.card5.level"},
+            MAP {"loser.card6.id": "loser.card6.level"},
+            MAP {"loser.card7.id": "loser.card7.level"},
+            MAP {"loser.card8.id": "loser.card8.level"}
+        ] AS loser_cards,
+        "loser.troop.count" AS loser_troop_count,
+        "loser.structure.count" AS loser_structure_count,
+        "loser.spell.count" AS loser_spell_count,
+        "loser.common.count" AS loser_common_count,
+        "loser.rare.count" AS loser_rare_count,
+        "loser.epic.count" AS loser_epic_count,
+        "loser.legendary.count" AS loser_legendary_count,
+        "loser.elixir.average" AS loser_average_elixir
+    FROM {{ source('clash_royale', 'raw_battles_12072020_01042021') }}
+)
+
+SELECT * FROM staging_battles
