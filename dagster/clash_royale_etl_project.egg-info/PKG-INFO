@@ -1,5 +1,5 @@
 Metadata-Version: 2.1
-Name: clash-royale-etl-project
+Name: clash_royale_etl_project
 Version: 0.0.0
 Requires-Dist: dagster==1.5.9
 Requires-Dist: dbt-duckdb==1.7.0
@@ -9,6 +9,7 @@ Requires-Dist: pyarrow==14.0.1
 Requires-Dist: dagster-duckdb
 Requires-Dist: dagster
 Requires-Dist: dagster-cloud
+Requires-Dist: kaggle
 Provides-Extra: dev
 Requires-Dist: dagster-webserver; extra == "dev"
 Requires-Dist: pytest; extra == "dev"

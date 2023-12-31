@@ -44,3 +44,60 @@ Runtime Error
 [0m16:34:24.185601 [debug] [MainThread]: Command `dbt run` failed at 16:34:24.185484 after 0.04 seconds
 [0m16:34:24.185943 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f9bd0c57c50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f9bd0c57890>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f9bd54ecc10>]}
 [0m16:34:24.186375 [debug] [MainThread]: Flushing usage events
+[0m23:05:11.624144 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fca3610>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fd09850>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fd0a190>]}
+
+
+============================== 23:05:11.648846 | fbd83e2d-c100-4d3c-9c11-3a69718eae99 ==============================
+[0m23:05:11.648846 [info ] [MainThread]: Running with dbt=1.7.2
+[0m23:05:11.650153 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/candicewu/.dbt', 'version_check': 'True', 'fail_fast': 'False', 'log_path': 'logs', 'debug': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'invocation_command': 'dbt run', 'log_format': 'default', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m23:05:11.651852 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/candicewu/clash_royale_etl/dbt/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m23:05:11.947959 [debug] [MainThread]: Resource report: {"command_name": "run", "command_wall_clock_time": 0.4891641, "process_user_time": 2.97072, "process_kernel_time": 0.493979, "process_mem_max_rss": "99454976", "command_success": false, "process_in_blocks": "0", "process_out_blocks": "0"}
+[0m23:05:11.949016 [debug] [MainThread]: Command `dbt run` failed at 23:05:11.948786 after 0.49 seconds
+[0m23:05:11.949704 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fd0a090>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fd0be90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b5a4c50>]}
+[0m23:05:11.950356 [debug] [MainThread]: Flushing usage events
+[0m18:06:36.114845 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10f9d9790>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fa52090>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fa52650>]}
+
+
+============================== 18:06:36.124285 | 4941e43d-9ab6-44af-a275-2766dac82889 ==============================
+[0m18:06:36.124285 [info ] [MainThread]: Running with dbt=1.7.2
+[0m18:06:36.125426 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'fail_fast': 'False', 'log_path': '/Users/candicewu/clash_royale_etl/dbt/logs', 'version_check': 'True', 'profiles_dir': '/Users/candicewu/.dbt', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt run', 'log_format': 'default', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m18:06:36.703612 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '4941e43d-9ab6-44af-a275-2766dac82889', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fa07550>]}
+[0m18:06:36.831070 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '4941e43d-9ab6-44af-a275-2766dac82889', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fa58710>]}
+[0m18:06:36.834102 [info ] [MainThread]: Registered adapter: duckdb=1.7.0
+[0m18:06:37.212121 [debug] [MainThread]: checksum: 61e99fc04fd80d06ce91efefd25c0802dcce8a048167599a1a188233d6ce8ed9, vars: {}, profile: , target: , version: 1.7.2
+[0m18:06:37.215141 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m18:06:37.216114 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '4941e43d-9ab6-44af-a275-2766dac82889', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fa529d0>]}
+[0m18:06:38.393898 [warn ] [MainThread]: [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 2 unused configuration paths:
+- models.clash_royale.example
+- models.clash_royale.warehouse
+[0m18:06:38.401245 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '4941e43d-9ab6-44af-a275-2766dac82889', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fb59d50>]}
+[0m18:06:38.441353 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '4941e43d-9ab6-44af-a275-2766dac82889', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fd95890>]}
+[0m18:06:38.442203 [info ] [MainThread]: Found 0 sources, 0 exposures, 0 metrics, 391 macros, 0 groups, 0 semantic models
+[0m18:06:38.443321 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '4941e43d-9ab6-44af-a275-2766dac82889', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10fd25510>]}
+[0m18:06:38.446983 [info ] [MainThread]: 
+[0m18:06:38.447897 [warn ] [MainThread]: Nothing to do. Try checking your model configs and model specification args
+[0m18:06:38.448996 [debug] [MainThread]: Command end result
+[0m18:06:38.481493 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 2.4655192, "process_user_time": 4.35344, "process_kernel_time": 0.793684, "process_mem_max_rss": "115785728", "process_in_blocks": "0", "process_out_blocks": "0"}
+[0m18:06:38.482550 [debug] [MainThread]: Command `dbt run` succeeded at 18:06:38.482297 after 2.47 seconds
+[0m18:06:38.483484 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10e5667d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b323290>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b2bd410>]}
+[0m18:06:38.484790 [debug] [MainThread]: Flushing usage events
+[0m22:23:18.557659 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104fcfd50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104ff1d90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104ff26d0>]}
+
+
+============================== 22:23:18.568982 | 24c4b1c6-aa4d-4519-88f5-0904c9b6d60d ==============================
+[0m22:23:18.568982 [info ] [MainThread]: Running with dbt=1.7.2
+[0m22:23:18.570655 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/Users/candicewu/.dbt', 'log_path': 'logs', 'fail_fast': 'False', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'log_format': 'default', 'invocation_command': 'dbt run', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m22:23:18.572280 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/candicewu/clash_royale_etl/dbt/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m22:23:18.577726 [debug] [MainThread]: Resource report: {"command_name": "run", "command_wall_clock_time": 0.18906538, "process_user_time": 4.499187, "process_kernel_time": 0.989003, "process_mem_max_rss": "98836480", "command_success": false, "process_in_blocks": "0", "process_out_blocks": "0"}
+[0m22:23:18.579367 [debug] [MainThread]: Command `dbt run` failed at 22:23:18.578971 after 0.19 seconds
+[0m22:23:18.580553 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104ff1e90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1008d5ed0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10094b590>]}
+[0m22:23:18.581667 [debug] [MainThread]: Flushing usage events

@@ -9,7 +9,8 @@ setup(
     install_requires=[
         required,
         "dagster",
-        "dagster-cloud"
+        "dagster-cloud",
+        "kaggle"
     ],
     extras_require={"dev": ["dagster-webserver", "pytest"]},
 )

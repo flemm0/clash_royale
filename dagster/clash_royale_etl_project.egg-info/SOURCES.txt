@@ -11,6 +11,5 @@ clash_royale_etl_project.egg-info/top_level.txt
 clash_royale_etl_project/assets/__init__.py
 clash_royale_etl_project/assets/api.py
 clash_royale_etl_project/assets/constants.py
-clash_royale_etl_project/assets/kaggle_asset.py
-clash_royale_etl_project/assets/kaggle_data.py
+clash_royale_etl_project/assets/ladder_battles.py
 clash_royale_etl_project/resources/__init__.py

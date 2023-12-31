@@ -6,6 +6,7 @@ pyarrow==14.0.1
 dagster-duckdb
 dagster
 dagster-cloud
+kaggle
 
 [dev]
 dagster-webserver
