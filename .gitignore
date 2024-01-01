@@ -1,1 +1,5 @@
+# local data storage directory
 dagster/data/
+
+# old assets file
+dagster/clash_royale_etl_project/assets/api.py
