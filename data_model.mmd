@@ -4,7 +4,7 @@ title: Clash Royale Data Model
 
 erDiagram
 
-    battle_fct {
+    fct_battle {
         string battle_id PK
         datetime battle_time FK
         integer arena_id FK
@@ -19,41 +19,38 @@ erDiagram
         integer loser_crowns
     }
 
-    player_dim {
+    dim_player {
         string player_tag FK
+        string player_name 
+        integer exp_level
+        integer trophies
+        integer best_trophies
+        integer wins
+        integer losses
+        integer battle_count
+        integer three_crown_wins
         string clan_tag FK
-        string clan_badge_id FK
+        string role 
     }
 
-    date_dim {
+    dim_date {
+        timestamp battle_time
         year year
         month month
         day day
-        timestamp timestamp
+        hour hour
+        minute minute
+        second second
     }
     
-    battle_cards_bridge {
+    br_battle_cards {
         string battle_id FK
         string player_tag FK
-        integer card1_id FK
-        integer card2_id FK
-        integer card3_id FK
-        integer card4_id FK
-        integer card5_id FK
-        integer card6_id FK
-        integer card7_id FK
-        integer card8_id FK
-        integer card1_level FK
-        integer card2_level FK
-        integer card3_level FK
-        integer card4_level FK
-        integer card5_level FK
-        integer card6_level FK
-        integer card7_level FK
-        integer card8_level FK
+        integer card_id FK
+        integer card_level 
     }
 
-    cards_dim {
+    dim_cards {
         integer card_id FK
         string name
         int max_level
@@ -61,20 +58,24 @@ erDiagram
         int elixir_cost
     }
 
-    clan_dim {
+    dim_clan {
         string clan_tag FK
         string clan_name
         string type
+        string description
+        integer clan_score
+        integer clan_war_trophies
         integer required_trophies
+        integer members
         integer location_id
         string location_name
         boolean is_country
     }
 
-    battle_fct ||--|{ player_dim : ""
-    battle_fct ||--|{ date_dim : ""
-    battle_fct ||--|{ clan_dim : ""
-    battle_fct ||--|| battle_cards_bridge : ""
-    cards_dim }|--|| battle_cards_bridge : ""
-    player_dim ||--|{ battle_cards_bridge : ""
+    fct_battle ||--|{ dim_player : ""
+    fct_battle ||--|{ dim_date : ""
+    dim_player ||--|{ dim_clan : ""
+    fct_battle ||--|| br_battle_cards : ""
+    dim_cards }|--|| br_battle_cards : ""
+    dim_player ||--|{ br_battle_cards : ""
     
