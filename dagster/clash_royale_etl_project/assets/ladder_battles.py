@@ -70,13 +70,14 @@ def extract_date(dir):
     return f"{datetime.strftime(min(dates), '%m%d%Y')}_{datetime.strftime(max(dates), '%m%d%Y')}"
 
 @asset(
-    deps=['raw_parquet_battle_data']
+    deps=['raw_parquet_battle_data'],
+    metadata={'schema': 'raw'}
 )
 def raw_battle_data_table(database: DuckDBResource):
     '''Upload raw player vs. player data into Motherduck table.'''
     table_name = f'raw_battles_{extract_date(constants.PARQUET_DATA_PATH)}'
     query = f'''
-        CREATE OR REPLACE TABLE {table_name} 
+        CREATE OR REPLACE TABLE raw.{table_name} 
         AS (
             SELECT * FROM "{constants.PARQUET_DATA_PATH}/*.parquet"
         );
