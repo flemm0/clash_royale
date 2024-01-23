@@ -17,7 +17,7 @@ motherduck_token = os.getenv('MOTHERDUCK_TOKEN')
 
 
 @asset
-def raw_battle_data():
+def raw_battle_data() -> None:
     '''Raw player vs. player data sourced from Kaggle'''
     dataset_id = 'bwandowando/clash-royale-season-18-dec-0320-dataset'
     api.dataset_download_files(dataset_id, unzip=True, path=constants.RAW_DATA_PATH)
@@ -36,8 +36,11 @@ def raw_battle_data():
 @asset(
     deps=['raw_battle_data']
 )
-def raw_parquet_battle_data():
+def raw_parquet_battle_data() -> None:
     '''Raw player vs. player data converted into Parquet file format'''
+    if not os.path.exists(constants.PARQUET_DATA_PATH):
+        os.mkdir(constants.PARQUET_DATA_PATH)
+        
     for file in os.listdir(constants.RAW_DATA_PATH):
         if file.endswith('WL_tagged.csv'):
             src_file = os.path.join(constants.RAW_DATA_PATH, file)
@@ -61,7 +64,7 @@ def raw_parquet_battle_data():
         except Exception as e:
             print(f'Failed to delete {path}: {e}')
 
-def extract_date(dir):
+def extract_date(dir) -> str:
     '''Extracts dates from directory of dated parquet files. Used for creating raw table name with range of dates.'''
     dates = []
     for file in os.listdir(dir):
@@ -73,7 +76,7 @@ def extract_date(dir):
     deps=['raw_parquet_battle_data'],
     metadata={'schema': 'raw'}
 )
-def raw_battle_data_table(database: DuckDBResource):
+def raw_battle_data_table(database: DuckDBResource) -> None:
     '''Upload raw player vs. player data into Motherduck table.'''
     table_name = f'raw_battles_{extract_date(constants.PARQUET_DATA_PATH)}'
     query = f'''
