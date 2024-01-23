@@ -5,7 +5,7 @@ from .assets import ladder_battles, players, cards, clans, seasons
 
 from .resources import database_resource
 
-old_assets = load_assets_from_modules([ladder_battles, cards, clans])
+old_assets = load_assets_from_modules([cards, clans])
 new_assets = load_assets_from_modules([seasons, players])
 
 defs = Definitions(
