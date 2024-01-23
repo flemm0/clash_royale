@@ -11,9 +11,34 @@ from . import constants
 api_key = os.getenv('API_TOKEN')
 headers = {'Authorization': f'Bearer {api_key}'}
 
-# MotherDuck connection for future refactoring
-# motherduck_token = os.getenv('MOTHERDUCK_TOKEN')
-# conn = duckdb.connect(f'md:?motherduck_token={motherduck_token}')
+@asset(
+    deps=['list_of_seasons'],
+    metadata={'schema': 'staging', 'table': 'staging.stg_top_players_by_season'}
+)
+def top_players_by_season(context: OpExecutionContext, database: DuckDBResource) -> None:
+    with database.get_connection() as conn:
+        seasons = conn.sql('SELECT * FROM staging.stg_seasons').fetchall()
+        context.log.info('Successfully queried staging.stg_seasons table')
+
+    insert_into_table_query = '''
+        INSERT OR IGNORE INTO staging.stg_top_players_by_season SELECT * FROM df
+    '''
+    
+    for season in seasons:
+        response = requests.get(f'{season[1]}?limit=10', headers=headers)
+        if response.status_code == 200:
+            data = response.json()['items']
+            if data:
+                df = pl.DataFrame(data)
+                df = df.with_columns(pl.lit(season[0]).alias('season_id'))
+                with database.get_connection() as conn:
+                    conn.execute(query=insert_into_table_query)
+                context.log.info(f'Top players for season {season[0]} successfully inserted.')
+
+                
+            
+
+    
 
 @asset(
     deps=['raw_parquet_battle_data'],
