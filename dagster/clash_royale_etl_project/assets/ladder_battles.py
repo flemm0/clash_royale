@@ -10,8 +10,6 @@ import pyarrow.parquet as pq
 import re
 from datetime import datetime
 
-os.environ['KAGGLE_CONFIG_DIR'] = constants.KAGGLE_CONFIG_DIR
-
 api = KaggleApi()
 api.authenticate()
 
