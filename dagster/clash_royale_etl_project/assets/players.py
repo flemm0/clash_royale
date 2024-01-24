@@ -22,7 +22,7 @@ def top_players_by_season(context: OpExecutionContext, database: DuckDBResource)
         context.log.info('Successfully queried staging.stg_seasons table')
 
     insert_into_table_query = '''
-        INSERT OR IGNORE INTO staging.stg_top_players_by_season SELECT * FROM df
+        INSERT OR IGNORE INTO staging.stg_top_players_by_season SELECT * FROM df;
     '''
     
     for season in seasons:
@@ -103,7 +103,7 @@ def player_battle_log(context: OpExecutionContext, database: DuckDBResource):
         context.log.info('Successfully queried player tags from stg_top_players_by_season table.')
 
     insert_query = '''
-        INSERT OR IGNORE INTO raw.player_battle_log BY NAME SELECT * FROM df
+        INSERT OR IGNORE INTO raw.player_battle_log BY NAME SELECT * FROM df;
     '''
     
     insertion_count = 0
@@ -127,3 +127,61 @@ def player_battle_log(context: OpExecutionContext, database: DuckDBResource):
                 context.log.info(f'No data returned for player: {player_tag}')
         else:
             context.log.info(f'Error getting API response: {response.status_code}')
+
+@asset(
+    deps=['top_players_by_season'],
+    metadata={'schema': 'staging', 'table': 'staging.stg_player_stats'}
+)
+def player_stats(context: OpExecutionContext, database: DuckDBResource):
+    '''Queries top player's overall Clash Royale statistics from RoyaleAPI'''
+    # query top player tags
+    with database.get_connection() as conn:
+        player_tags_query = '''
+            SELECT DISTINCT tag 
+            FROM staging.stg_top_players_by_season
+            ORDER BY season_id DESC;
+        '''
+        player_tags = conn.sql(query=player_tags_query).fetchall()
+        player_tags = [tag[0] for tag in player_tags]
+        context.log.info('Successfully queried player tags from stg_top_players_by_season table.')
+
+    fields = [
+        'tag', 'name', 'expLevel', 'trophies', 'bestTrophies',
+        'wins', 'losses', 'battleCount', 'threeCrownWins'
+    ]
+
+    insert_query = '''
+        INSERT OR REPLACE INTO staging.stg_player_stats BY NAME SELECT * FROM df;
+    '''
+
+    player_stats_list, players_missing_data, insertion_count = [], 0, 0
+    for player_tag in player_tags:
+        formatted_tag = player_tag.replace('#', '%23')
+        player_stats_url = f'https://api.clashroyale.com/v1/players/{formatted_tag}'
+        response = requests.get(player_stats_url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            if data:
+                parsed_data = {k:v for k,v in data.items() if k in fields}
+                player_stats_list.append(parsed_data)
+                insertion_count += 1
+                context.log.info(f'Fetched stats for {player_tag}. Total players fetched: {insertion_count}')
+                if len(player_stats_list) == 100:
+                    df = pl.DataFrame(player_stats_list)
+                    with database.get_connection() as conn:
+                        conn.execute(query=insert_query)
+                        context.log.info('Sucessfully inserted stats into database')
+                    player_stats_list = []
+            else:
+                context.log.info(f'No data returned for player: {player_tag}')
+        elif response.status_code == 404:
+            players_missing_data += 1
+            context.log.info(f'No data available for player tag: {player_tag}')
+        else:
+            context.log.info(f'Error getting API response: {response.status_code}')
+    if len(player_stats_list):
+        df = pl.DataFrame(player_stats_list)
+        with database.get_connection() as conn:
+            conn.execute(query=insert_query)
+            context.log.info('Sucessfully inserted stats into database')
+    context.log.info(f'{insertion_count} players successfully inserted.\n{players_missing_data} players have no data available.')
