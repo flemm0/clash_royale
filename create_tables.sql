@@ -57,3 +57,29 @@ CREATE OR REPLACE TABLE raw.player_battle_log (
   opponent_elixirLeaked DOUBLE,
   UNIQUE(team_tag, opponent_tag, battleTime)
 );
+
+CREATE TABLE IF NOT EXISTS staging.stg_player_stats (
+  tag VARCHAR PRIMARY KEY,
+  name VARCHAR,
+  expLevel INT,
+  trophies INT,
+  bestTrophies INT,
+  wins INT,
+  losses INT,
+  battleCount INT,
+  threeCrownWins INT
+);
+
+CREATE TABLE IF NOT EXISTS staging.stg_clan_stats (
+  tag VARCHAR PRIMARY KEY,
+  "name" VARCHAR,
+  "type" VARCHAR,
+  description VARCHAR,
+  clanScore INT,
+  clanWarTrophies INT,
+  requiredTrophies INT,
+  members INT,
+  location_id BIGINT,
+  location_name VARCHAR,
+  is_country BOOLEAN
+);
