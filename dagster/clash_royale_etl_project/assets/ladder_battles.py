@@ -1,6 +1,6 @@
 from . import constants
-from dagster import asset
-from dagster_duckdb import DuckDBResource, OpExecutionContext
+from dagster import asset, OpExecutionContext
+from dagster_duckdb import DuckDBResource
 import os
 from kaggle.api.kaggle_api_extended import KaggleApi
 import shutil
