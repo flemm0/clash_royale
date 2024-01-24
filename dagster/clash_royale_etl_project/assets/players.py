@@ -16,6 +16,7 @@ headers = {'Authorization': f'Bearer {api_key}'}
     metadata={'schema': 'staging', 'table': 'staging.stg_top_players_by_season'}
 )
 def top_players_by_season(context: OpExecutionContext, database: DuckDBResource) -> None:
+    '''Top 10 players from each season in Clash Royale starting from 2016-02'''
     with database.get_connection() as conn:
         seasons = conn.sql('SELECT * FROM staging.stg_seasons').fetchall()
         context.log.info('Successfully queried staging.stg_seasons table')
@@ -34,83 +35,95 @@ def top_players_by_season(context: OpExecutionContext, database: DuckDBResource)
                 with database.get_connection() as conn:
                     conn.execute(query=insert_into_table_query)
                 context.log.info(f'Top players for season {season[0]} successfully inserted.')
+            else:
+                context.log.info(f'No data returned for season: {season}')
+        else:
+            context.log.info(f'Error getting API response: {response.status_code}')
 
-                
-            
+def flatten_json(nested_json):
+   flattened_json = {}
+   
+   def flatten(x, name=''):
+      if type(x) is dict:
+         for a in x:
+            flatten(x[a], name + a + '_')
+      else:
+         flattened_json[name[:-1]] = x
 
-    
+   flatten(nested_json)
+   return flattened_json
+
+def parse_battle_log_data(log: list):
+    filtered_log = []
+    for battle in log:
+        filtered_data = {}
+        battle = flatten_json(battle)
+
+        outer_keys = [
+            'type', 'battleTime', 'isLadderTournament', 'arena_id', 'arena_name', 
+            'gameMode_id', 'gameMode_name', 'deckSelection', 'isHostedMatch', 'leagueNumber'
+        ]
+        for key in outer_keys:
+            try:
+                filtered_data[key] = battle[key]
+            except KeyError:
+                filtered_data[key] = None
+
+        inner_keys = [
+            'tag', 'name', 'startingTrophies', 'trophyChange', 'crowns', 'kingTowerHitPoints', 
+            'princessTowersHitPoints', 'clan_tag', 'clan_name', 'clan_badgeId', 'cards', 
+            'supportCards', 'globalRank', 'elixirLeaked'
+        ]
+        for key in inner_keys: # for the 'team' and 'opponent' fields, which are highly nested
+            try:
+                team_key = f'team_{key}'
+                filtered_data[team_key] = flatten_json(battle['team'][0])[key]
+            except KeyError:
+                filtered_data[team_key] = None
+            try:
+                opponent_key = f'opponent_{key}'
+                filtered_data[opponent_key] = flatten_json(battle['opponent'][0])[key]
+            except KeyError:
+                filtered_data[opponent_key] = None
+        
+        filtered_data['team_cards'] = [{'name': card['name'], 'level': card['level']} for card in filtered_data['team_cards']]
+        filtered_data['opponent_cards'] = [{'name': card['name'], 'level': card['level']} for card in filtered_data['opponent_cards']]
+        filtered_log.append(filtered_data)
+    return filtered_log
 
 @asset(
-    deps=['raw_parquet_battle_data'],
-    metadata={'schema': 'staging', 'table': 'staging.stg_players'}
+        deps=['top_players_by_season'],
+        metadata={'schema': 'raw', 'table': 'raw.player_battle_log'}
 )
-def staging_player_info_table(context: OpExecutionContext, database: DuckDBResource):
-    '''Clash Royale player data sourced from official Clash Royale API'''
-    player_tag_query = f'''
-        (
-            SELECT DISTINCT "winner.tag" AS player_tag 
-            FROM "{constants.PARQUET_DATA_PATH}/*.parquet"
-        )
-        UNION
-        (
-            SELECT DISTINCT "loser.tag" AS player_tag 
-            FROM "{constants.PARQUET_DATA_PATH}/*.parquet"
-        )
+def player_battle_log(context: OpExecutionContext, database: DuckDBResource):
+    '''Battle log for each of the top 10 players for every season'''
+    with database.get_connection() as conn:
+        player_tags = conn.sql('SELECT tag FROM staging.stg_top_players_by_season;').fetchall()
+        player_tags = [tag[0] for tag in player_tags]
+        context.log.info('Successfully queried player tags from stg_top_players_by_season table.')
+
+    insert_query = '''
+        INSERT OR IGNORE INTO raw.player_battle_log BY NAME SELECT * FROM df
     '''
-    player_tags = duckdb.sql(player_tag_query).fetchnumpy()['player_tag']
-
-    fields = [
-        'tag', 'name', 'expLevel', 'trophies', 'bestTrophies',
-        'wins', 'losses', 'battleCount', 'threeCrownWins', 'role', 'currentFavoriteCard'
-    ]
-
-    insert_count = 0
+    
+    insertion_count = 0
     for player_tag in player_tags:
+        context.log.info(f'{player_tag}')
         formatted_tag = player_tag.replace('#', '%23')
-        player_url = f'https://api.clashroyale.com/v1/players/{formatted_tag}'
-        response = requests.get(player_url, headers)
-
-        # table = None
-
-        insert_query = f'''
-                BEGIN TRANSACTION;
-                INSERT OR REPLACE INTO staging.stg_players SELECT * FROM df;
-                COMMIT;
-            '''
-
+        battle_log_url = f'https://api.clashroyale.com/v1/players/{formatted_tag}/battlelog'
+        response = requests.get(battle_log_url, headers=headers)
         if response.status_code == 200:
             data = response.json()
             if data:
-                # parse fields of interest from API
-                filtered_data = {k: v for k, v in data.items() if k in fields}
-                try:
-                    filtered_data['clanTag'] = data['clan']['tag']
-                except KeyError:
-                    filtered_data['clanTag'] = None
-                try:
-                    filtered_data['role'] = data['role']
-                except KeyError:
-                    filtered_data['role'] = None
-
-                # read data into Polars DataFrame
-                df = pl.DataFrame(filtered_data)
-
-                ## single line insertion
+                # parse data
+                parsed_data = parse_battle_log_data(log=data)
+                context.log.info(f'Number of battles: {len(parsed_data)}')
+                df = pl.DataFrame(parsed_data)
                 with database.get_connection() as conn:
                     conn.execute(query=insert_query)
-                insert_count += 1
-                if insert_count % 5 == 0:
-                    context.log.info(f'Inserted data for {insert_count} players.')
-                
-                ## bulk insertion
-                # if table is None:
-                #     table = df
-                # else:
-                #     table = table.extend(df)
-                # if table.estimated_size('mb') > 500:
-                #     with database.get_connection() as conn:
-                #         conn.execute(query=insert_query)
-                #     table = None
-                #     insert_count += 500
-                #     if insert_count % 1000 == 0:
-                #         context.log.info(f'Inserted data for {insert_count} players.')
+                insertion_count += 1
+                context.log.info(f'Inserted battle log for {player_tag}. Total player insertion count: {insertion_count}')
+            else:
+                context.log.info(f'No data returned for player: {player_tag}')
+        else:
+            context.log.info(f'Error getting API response: {response.status_code}')
