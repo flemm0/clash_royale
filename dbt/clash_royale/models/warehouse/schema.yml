@@ -44,6 +44,12 @@ models:
       constraints:
       - type: primary key
         columns: [clan_id]
+    
+    - name: deck_dim
+      description: 'Dimension table for deck'
+    
+    - name: card_dim
+      description: 'Snowflaked dimension from deck for individual card information'
 
   - name: stg_battles
     description: 'Renamed and card information transformation applied to raw battles table'
