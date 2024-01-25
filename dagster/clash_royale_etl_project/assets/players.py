@@ -86,8 +86,13 @@ def parse_battle_log_data(log: list):
             except KeyError:
                 filtered_data[opponent_key] = None
         
-        filtered_data['team_cards'] = [{'name': card['name'], 'level': card['level']} for card in filtered_data['team_cards']]
-        filtered_data['opponent_cards'] = [{'name': card['name'], 'level': card['level']} for card in filtered_data['opponent_cards']]
+        filtered_data['team_cards'] = [
+            {'name': card['name'], 'level': card['level'], 'elixirCost': card['elixirCost']} if card['name'] != 'Mirror' else {'name': card['name'], 'level': card['level'], 'elixirCost': None} for card in filtered_data['team_cards']
+        ]
+        
+        filtered_data['opponent_cards'] = [
+            {'name': card['name'], 'level': card['level'], 'elixirCost': card['elixirCost']} if card['name'] != 'Mirror' else {'name': card['name'], 'level': card['level'], 'elixirCost': None} for card in filtered_data['opponent_cards']
+        ]
         filtered_log.append(filtered_data)
     return filtered_log
 
