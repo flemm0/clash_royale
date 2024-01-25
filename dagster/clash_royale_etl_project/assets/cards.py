@@ -8,15 +8,16 @@ import polars as pl
 api_key = os.getenv('API_TOKEN')
 headers = {'Authorization': f'Bearer {api_key}'}
 
-@asset(metadata={'schema': 'staging', 'table': 'staging.stg_cards'})
+@asset(
+        metadata={'schema': 'staging', 'table': 'staging.stg_cards'}
+)
 def card_info(database: DuckDBResource) -> None:
-    '''Extracts and loads Clash Royale card information from API'''
-    card_url = 'https://api.clashroyale.com/v1/cards'
+    '''Extracts and loads Clash Royale card information from GitHub API'''
+    card_url = 'https://royaleapi.github.io/cr-api-data/json/cards.json'
     response = requests.get(url=card_url, headers=headers)
     if response.status_code == 200:
         data = response.json()
         if data:
-            items = data['items']
-            df = pl.DataFrame(items)
+            df = pl.DataFrame(data)
             with database.get_connection() as conn:
                 conn.execute('CREATE OR REPLACE TABLE staging.stg_cards AS SELECT * from df')
