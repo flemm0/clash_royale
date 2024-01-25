@@ -134,7 +134,7 @@ def player_battle_log(context: OpExecutionContext, database: DuckDBResource):
             context.log.info(f'Error getting API response: {response.status_code}')
 
 @asset(
-    deps=['top_players_by_season'],
+    deps=['player_battle_log'],
     metadata={'schema': 'staging', 'table': 'staging.stg_player_stats'}
 )
 def player_stats(context: OpExecutionContext, database: DuckDBResource):
@@ -142,13 +142,21 @@ def player_stats(context: OpExecutionContext, database: DuckDBResource):
     # query top player tags
     with database.get_connection() as conn:
         player_tags_query = '''
-            SELECT DISTINCT tag 
-            FROM staging.stg_top_players_by_season
-            ORDER BY season_id DESC;
+            (
+            SELECT DISTINCT team_tag AS tag
+            FROM raw.player_battle_log
+            ORDER BY battleTime DESC
+            )
+            UNION 
+            (
+            SELECT DISTINCT opponent_tag AS tag
+            FROM raw.player_battle_log
+            ORDER BY battleTime DESC
+            );
         '''
         player_tags = conn.sql(query=player_tags_query).fetchall()
         player_tags = [tag[0] for tag in player_tags]
-        context.log.info('Successfully queried player tags from stg_top_players_by_season table.')
+        context.log.info('Successfully queried player tags from raw player_battle_log table.')
 
     fields = [
         'tag', 'name', 'expLevel', 'trophies', 'bestTrophies',
