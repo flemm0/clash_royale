@@ -27,7 +27,7 @@ models:
     description: 'Column names and datetime data types enforced on raw player battle log table'
 
   - name: player_dim
-    description: 'Dimension table for Clash Royale Players'
+    description: 'Dimension table for Clash Royale players'
     constraints:
     - type: primary key
       columns: [player_id]
@@ -35,6 +35,12 @@ models:
       columns: [trophy_count, best_trophy_count]
       expression: "trophy_count <= best_trophy_count"
       name: current_trophies_not_larger_than_best_trophies
+
+    - name: clan_dim
+      description: 'Dimension table for Clash Royale clans'
+      constraints:
+      - type: primary key
+        columns: [clan_id]
 
   - name: stg_battles
     description: 'Renamed and card information transformation applied to raw battles table'
