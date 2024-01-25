@@ -13,15 +13,25 @@ headers = {'Authorization': f'Bearer {api_key}'}
 
 @asset(
     metadata={'schema': 'staging', 'table': 'stg_clan_stats'},
-    deps=['top_players_by_season']
+    deps=['player_battle_log']
 )
 def clan_stats(context: OpExecutionContext, database: DuckDBResource):
     '''Clash Royale clan data sourced from official Clash Royale API'''
     with database.get_connection() as conn:
         clan_tags_query = '''
-            SELECT DISTINCT clan.tag
-            FROM staging.stg_top_players_by_season
-            WHERE clan.tag IS NOT NULL;
+            (
+                SELECT DISTINCT team_clan_tag AS tag
+                FROM raw.player_battle_log
+                WHERE team_clan_tag IS NOT NULL
+                ORDER BY battleTime DESC
+            )
+            UNION 
+            (
+                SELECT DISTINCT opponent_clan_tag AS tag
+                FROM raw.player_battle_log
+                WHERE opponent_clan_tag IS NOT NULL
+                ORDER BY battleTime DESC
+            );
         '''
         clan_tags = conn.sql(query=clan_tags_query).fetchall()
         clan_tags = [tag[0] for tag in clan_tags]
