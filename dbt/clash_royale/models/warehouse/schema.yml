@@ -1,21 +1,32 @@
 version: 2
 
 sources: 
-  - name: clash_royale
+  - name: staging
     description: 'Database holding all raw and transformed tables in Clash Royale project'
     database: clash_royale
-    schema: main
+    schema: staging
     tables:
-      - name: raw_battles_12072020_01042021
-        description: 'A table containing raw player vs player battle data grabbed from Kaggle'
       - name: stg_cards
         description: 'Staging table containing information on cards in Clash Royale'
+      - name: stg_top_players_by_season
+        description: 'A reference table containing player tags for the top 10 ranking players in each season'
+      - name: stg_player_stats
+        description: 'Staging table containing stats for individual players'
+      - name: stg_clan_stats
+        description: 'Staging table containing stats for clans'
+  - name: raw
+    description: 'Database holding unnested data from querying individual player logs'
+    database: clash_royale
+    schema: raw
+    tables:
+      - name: player_battle_log
+        description: 'Recent battle log data queried from official Clash Royale API'
 
 models:
+  - name: stg_player_battle_log
+    description: 'Column names and datetime data types enforced on raw player battle log table'
   - name: stg_battles
     description: 'Renamed and card information transformation applied to raw battles table'
     constraints:
     - type: primary key
       columns: [battle_time, winner_tag, loser_tag]
-  - name: date_dim
-    description: 'A date dimension'
