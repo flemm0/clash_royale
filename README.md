@@ -10,7 +10,9 @@ One of the main aspects of the game is how you choose to build your "battle deck
 
 The goal of this project is to use data engineering and analytics to find winning deck combinations in Clash Royale. I have built a data pipeline that involves extraction, loading, and transformation (ELT) of Clash Royale data into an analysis-friendly data warehouse. A reporting dashboard will also be built on top of the data warehouse.
 
-The data is sourced from [Kaggle](https://www.kaggle.com/datasets/bwandowando/clash-royale-season-18-dec-0320-dataset) as well as the official [Clash Royale API](https://developer.clashroyale.com/#/). The Kaggle data was sourced due to API changes that made it difficult to ingest player vs. player data directly from the API. For example, if querying information on users, the API requires the request to specify the unique user id to return data for, therefore requiring a call for every single user. This make gathering information on millions of users rather challenging without having a continuously running job on a cloud compute platform. Regardless, the data hosted on Kaggle is of decent size (>20 GB) to get me started on data management concepts, and I have plans to migrate this code into the cloud in the near future.
+## Data Source
+
+The data is sourced from the official [Clash Royale API](https://developer.clashroyale.com/#/) and [Royale GitHub API](https://royaleapi.github.io/cr-api-data/). With millions of players worldwide, I started by first determining a set of players whose data I would ingest into the warehouse. I did this by querying the API for the top 10 players in each "season" of Clash Royale, which is for the duration of a month. The earliest season that there is data available for is Feburary 2016, so the warehouse contains data for the top 10 players in each season since then.
 
 ## Tools/Technologies
 
@@ -28,3 +30,9 @@ The Kimball data model I designed for my warehouse is as follows:
 - and a dimension for clans (a group of players)
 
 ![Data Model ER Diagram](clash_royale_data_model.png)
+
+## ETL Orchestration
+
+The screenshot below depicts the DAG that I have written in the Dagster framework to schedule the ETL process of querying data from the APIs, writing them to staging tables in the warehouse, and finally generating the final data model in the warehouse using dbt.
+
+![Dagster UI Screenshot](dagster_ui_screenshot.png)
