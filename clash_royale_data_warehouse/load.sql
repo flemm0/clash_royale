@@ -1,0 +1,12 @@
+COPY player_dim FROM 'clash_royale_data_warehouse/player_dim.parquet' (FORMAT 'parquet');
+COPY deck_dim FROM 'clash_royale_data_warehouse/deck_dim.parquet' (FORMAT 'parquet');
+COPY date_dim FROM 'clash_royale_data_warehouse/date_dim.parquet' (FORMAT 'parquet');
+COPY fct_battle FROM 'clash_royale_data_warehouse/fct_battle.parquet' (FORMAT 'parquet');
+COPY clan_dim FROM 'clash_royale_data_warehouse/clan_dim.parquet' (FORMAT 'parquet');
+COPY card_dim FROM 'clash_royale_data_warehouse/card_dim.parquet' (FORMAT 'parquet');
+COPY raw.player_battle_log FROM 'clash_royale_data_warehouse/raw_player_battle_log.parquet' (FORMAT 'parquet');
+COPY staging.stg_top_players_by_season FROM 'clash_royale_data_warehouse/staging_stg_top_players_by_season.parquet' (FORMAT 'parquet');
+COPY staging.stg_seasons FROM 'clash_royale_data_warehouse/staging_stg_seasons.parquet' (FORMAT 'parquet');
+COPY staging.stg_cards FROM 'clash_royale_data_warehouse/staging_stg_cards.parquet' (FORMAT 'parquet');
+COPY staging.stg_player_stats FROM 'clash_royale_data_warehouse/staging_stg_player_stats.parquet' (FORMAT 'parquet');
+COPY staging.stg_clan_stats FROM 'clash_royale_data_warehouse/staging_stg_clan_stats.parquet' (FORMAT 'parquet');
