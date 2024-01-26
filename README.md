@@ -16,7 +16,7 @@ The data is sourced from the official [Clash Royale API](https://developer.clash
 
 ## Tools/Technologies
 
-In the interest of keeping costs to a minimum, I opted for open-source tools. The data extraction and loading is written in Python. For my data warehouse I am using [MotherDuck](https://motherduck.com/), a cloud-hosted DuckDB platform. For data transformations, I am using [dbt](https://www.getdbt.com/). Finally, I am using [Dagster](https://dagster.io/) to orchestrate everything in the ELT process.
+In the interest of keeping costs to a minimum, I opted for open-source tools. The data extraction and loading is written in Python. For my data warehouse I am using [MotherDuck](https://motherduck.com/), a cloud-hosted DuckDB platform. For data transformations, I am using [dbt](https://www.getdbt.com/). Finally, I am using [Dagster](https://dagster.io/) to orchestrate everything in the ELT process. The logic for the orchestration can be mostly found [here](https://github.com/flemm0/clash_royale/tree/main/dbt/clash_royale/models/warehouse)
 
 ## Data Model
 
@@ -28,6 +28,8 @@ The Kimball data model I designed for my warehouse is as follows:
 - a dimension for deck (an unordered combination of eight cards)
 - a snowflaked dimension for cards, for storing statistics for individual cards
 - and a dimension for clans (a group of players)
+
+The code for the dbt models files used to generate these tables can be found [here](https://github.com/flemm0/clash_royale/tree/main/dbt/clash_royale/models/warehouse)
 
 ![Data Model ER Diagram](images/clash_royale_data_model.png)
 
