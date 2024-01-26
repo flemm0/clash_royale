@@ -29,10 +29,10 @@ The Kimball data model I designed for my warehouse is as follows:
 - a snowflaked dimension for cards, for storing statistics for individual cards
 - and a dimension for clans (a group of players)
 
-![Data Model ER Diagram](clash_royale_data_model.png)
+![Data Model ER Diagram](images/clash_royale_data_model.png)
 
 ## ETL Orchestration
 
 The screenshot below depicts the DAG that I have written in the Dagster framework to schedule the ETL process of querying data from the APIs, writing them to staging tables in the warehouse, and finally generating the final data model in the warehouse using dbt.
 
-![Dagster UI Screenshot](dagster_ui_screenshot.png)
+![Dagster UI Screenshot](images/dagster_ui_screenshot.png)
