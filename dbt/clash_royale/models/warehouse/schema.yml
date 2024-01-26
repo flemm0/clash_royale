@@ -23,6 +23,9 @@ sources:
         description: 'Recent battle log data queried from official Clash Royale API'
 
 models:
+  - name: fct_battle
+    description: 'Fact table containing individual player stats for a battle'
+
   - name: date_dim
     description: 'Date dimension table'
     constraints:
@@ -50,9 +53,3 @@ models:
     
     - name: card_dim
       description: 'Snowflaked dimension from deck for individual card information'
-
-  - name: stg_battles
-    description: 'Renamed and card information transformation applied to raw battles table'
-    constraints:
-    - type: primary key
-      columns: [battle_time, winner_tag, loser_tag]
