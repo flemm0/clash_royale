@@ -13,7 +13,8 @@ headers = {'Authorization': f'Bearer {api_key}'}
 
 @asset(
     deps=['list_of_seasons'],
-    metadata={'schema': 'staging', 'table': 'staging.stg_top_players_by_season'}
+    metadata={'schema': 'staging', 'table': 'staging.stg_top_players_by_season'},
+    compute_kind='python'
 )
 def top_players_by_season(context: OpExecutionContext, database: DuckDBResource) -> None:
     '''Top 10 players from each season in Clash Royale starting from 2016-02'''
@@ -98,7 +99,8 @@ def parse_battle_log_data(log: list):
 
 @asset(
         deps=['top_players_by_season'],
-        metadata={'schema': 'raw', 'table': 'raw.player_battle_log'}
+        metadata={'schema': 'raw', 'table': 'raw.player_battle_log'},
+        compute_kind='python'
 )
 def player_battle_log(context: OpExecutionContext, database: DuckDBResource):
     '''Battle log for each of the top 10 players for every season'''
@@ -135,7 +137,8 @@ def player_battle_log(context: OpExecutionContext, database: DuckDBResource):
 
 @asset(
     deps=['player_battle_log'],
-    metadata={'schema': 'staging', 'table': 'staging.stg_player_stats'}
+    metadata={'schema': 'staging', 'table': 'staging.stg_player_stats'},
+    compute_kind='python'
 )
 def player_stats(context: OpExecutionContext, database: DuckDBResource):
     '''Queries top player's overall Clash Royale statistics from RoyaleAPI'''

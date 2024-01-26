@@ -1,16 +1,22 @@
 # fmt: off
 from dagster import Definitions, load_assets_from_modules
 
-from .assets import ladder_battles, players, cards, clans, seasons
+from .assets import players, cards, clans, seasons, dbt_assets, constants
 
 from .resources import database_resource
 
-old_assets = load_assets_from_modules([cards, clans])
-new_assets = load_assets_from_modules([seasons, players])
+from dagster_dbt import DbtCliResource
+
+import os
+
+
+python_assets = load_assets_from_modules([cards, clans, seasons, players])
+dbt_assets = load_assets_from_modules([dbt_assets])
 
 defs = Definitions(
-    assets=[*old_assets, *new_assets],
+    assets=[*python_assets, *dbt_assets],
     resources={
-        'database': database_resource
+        'database': database_resource,
+        'dbt': DbtCliResource(project_dir=os.fspath(constants.dbt_project_dir))
     }
 )

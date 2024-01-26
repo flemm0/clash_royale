@@ -13,7 +13,8 @@ headers = {'Authorization': f'Bearer {api_key}'}
 
 @asset(
     metadata={'schema': 'staging', 'table': 'stg_clan_stats'},
-    deps=['player_battle_log']
+    deps=['player_battle_log'],
+    compute_kind='python'
 )
 def clan_stats(context: OpExecutionContext, database: DuckDBResource):
     '''Clash Royale clan data sourced from official Clash Royale API'''

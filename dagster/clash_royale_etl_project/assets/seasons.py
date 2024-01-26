@@ -9,7 +9,8 @@ api_key = os.getenv('API_TOKEN')
 headers = {'Authorization': f'Bearer {api_key}'}
 
 @asset(
-    metadata={'schema': 'staging', 'table': 'staging.stg_seasons'}
+    metadata={'schema': 'staging', 'table': 'staging.stg_seasons'},
+    compute_kind='python'
 )
 def list_of_seasons(database: DuckDBResource) -> None:
     seasons_url = 'https://api.clashroyale.com/v1/locations/global/seasons'

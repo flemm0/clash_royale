@@ -7,6 +7,7 @@ Requires-Dist: python-dotenv
 Requires-Dist: polars
 Requires-Dist: pyarrow==14.0.1
 Requires-Dist: dagster-duckdb
+Requires-Dist: dagster-dbt
 Requires-Dist: dagster
 Requires-Dist: dagster-cloud
 Requires-Dist: kaggle

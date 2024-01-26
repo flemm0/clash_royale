@@ -9,7 +9,8 @@ api_key = os.getenv('API_TOKEN')
 headers = {'Authorization': f'Bearer {api_key}'}
 
 @asset(
-        metadata={'schema': 'staging', 'table': 'staging.stg_cards'}
+        metadata={'schema': 'staging', 'table': 'staging.stg_cards'},
+        compute_kind='python'
 )
 def card_info(database: DuckDBResource) -> None:
     '''Extracts and loads Clash Royale card information from GitHub API'''

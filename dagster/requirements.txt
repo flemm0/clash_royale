@@ -4,3 +4,4 @@ python-dotenv
 polars
 pyarrow==14.0.1
 dagster-duckdb
+dagster-dbt

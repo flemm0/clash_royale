@@ -8,12 +8,21 @@ sources:
     tables:
       - name: stg_cards
         description: 'Staging table containing information on cards in Clash Royale'
+        meta: 
+          dagster:
+            asset_key: ["card_info"]
       - name: stg_top_players_by_season
         description: 'A reference table containing player tags for the top 10 ranking players in each season'
       - name: stg_player_stats
         description: 'Staging table containing stats for individual players'
+        meta:
+          dagster:
+            asset_key: ["player_stats"]
       - name: stg_clan_stats
         description: 'Staging table containing stats for clans'
+        meta:
+          dagster:
+            asset_key: ["clan_stats"]
   - name: raw
     description: 'Database holding unnested data from querying individual player logs'
     database: clash_royale
@@ -21,6 +30,9 @@ sources:
     tables:
       - name: player_battle_log
         description: 'Recent battle log data queried from official Clash Royale API'
+        meta:
+          dagster:
+            asset_key: ["player_battle_log"]
 
 models:
   - name: fct_battle
