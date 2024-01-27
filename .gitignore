@@ -7,3 +7,5 @@ data_model.mmd
 
 # pycache files
 *.py[cod]
+
+.streamlit/
