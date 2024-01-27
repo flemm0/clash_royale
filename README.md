@@ -1,14 +1,21 @@
 # Clash Royale - ETL and Data Warehousing for Analytics Project
 
+### Table of Contents
+* [Background Information](https://github.com/flemm0/clash_royale#background-information)
+* [Data Source](https://github.com/flemm0/clash_royale#data-source)
+* [Tools and Technologies](https://github.com/flemm0/clash_royale#data-source)
+* [Data Model Design](https://github.com/flemm0/clash_royale#data-model)
+* [ETL (ELT) Orchestration](https://github.com/flemm0/clash_royale#elt-orchestration)
+* [Analytics App](https://github.com/flemm0/clash_royale#analytics-app)
+* [Database Sharing](https://github.com/flemm0/clash_royale#database-sharing)
+
 ## Background Information
 
 Clash Royale is a mobile game that I have been playing for over a year now. It is a real-time strategy game where players build decks of cards representing troops, spells, and defenses and battle against opponents in fast-paced, head-to-head duels. The goal is to destroy your opponent's towers while defending your own using strategic placement, timing, and resource management. As you win battles and progress, you unlock new cards, upgrade existing ones, and climb through different arenas.
 
 One of the main aspects of the game is how you choose to build your "battle deck". Each battle deck contains eight cards and the idea is to use cards that work well with each other. With over 100 cards available in the game, there are many different deck combinations one can choose to use. As I have progressed into higher levels, I noticed people employing different strategies in how they build their decks. Some people use all of the cheapest cards in the game, some focus solely on defense, and others will use only troops that fly.
 
-## Project Goals
-
-The goal of this project is to use data engineering and analytics to find winning deck combinations in Clash Royale. I have built a data pipeline that involves extraction, loading, and transformation (ELT) of Clash Royale data into an analysis-friendly data warehouse. A reporting dashboard will also be built on top of the data warehouse.
+The goal of this project is to use data engineering techniques such as ELT and data modeling to design an analytics-friendly data warehouse that can enable gameplay insights. To showcase the utility of the warehouse, a reporting dashboard will also be built as the final layer.
 
 ## Data Source
 
@@ -33,15 +40,21 @@ The code for the dbt models files used to generate these tables can be found [he
 
 ![Data Model ER Diagram](images/clash_royale_data_model.png)
 
-## ETL Orchestration
+## ELT Orchestration
 
 The screenshot below depicts the DAG that I have written in the Dagster framework to schedule the ETL process of querying data from the APIs, writing them to staging tables in the warehouse, and finally generating the final data model in the warehouse using dbt.
 
 ![Dagster UI Screenshot](images/dagster_ui_screenshot.png)
 
+## Analytics App
+
+This project wouldn't be an end-to-end analytics engineering project without an analytics dashboard that shows what insights can be derived from the data warehouse. I have developed a quick dashboard using the [Streamlit](https://streamlit.io/) library in Python and hosted it on Streamlit Community Cloud for anyone to view. Click [here](https://clashroyale.streamlit.app/) to view the app. (Once you have navigated to the app's url I suggest clicking on the three buttons on the top right corner, clicking on "settings" and then turning on wide mode for a better viewing experience.)
+
 ## Database Sharing
 
-A cool feature of DuckDB/MotherDuck is the ability to easily share databases. I have provided a snapshot of the data warehouse as of January 25, 2024 for users to import query the data warehouse that I have created. All related files are stored in the `clash_royale_data_warehouse` directory of this repository.
+A cool feature of DuckDB/MotherDuck is the ability to easily share databases. I have provided a snapshot of the data warehouse as of January 25, 2024 for users to import and query the data warehouse that I have created. All related files are stored in the `clash_royale_data_warehouse` directory of this repository.
+
+**The following instructions detail how to load the data warehouse on your local machine:**
 
 Assuming DuckDB and git is installed on your system, first clone the repository:
 ```bash
@@ -57,7 +70,7 @@ Import database from the .sql and parquet files with one command:
 ```
 D IMPORT DATABASE 'clash_royale_data_warehouse';
 ```
-Viola!
+Voila!
 ```
 D SHOW TABLES;
 ┌────────────┐
