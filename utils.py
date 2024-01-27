@@ -13,18 +13,10 @@ def init_connection():
 
 @st.cache_data
 def cr_card_images() -> pl.DataFrame:
-    '''Function to query Clash Royale API for cards and their images'''
-    api_token = st.secrets['API_TOKEN']
-    headers = {'Authorization': f'Bearer {api_token}'}
-    response = requests.get(url='https://api.clashroyale.com/v1/cards', headers=headers)
-    if response.status_code == 200:
-        data = response.json()['items']
-        if data:
-            parsed_data = [{'Card Name': item['name'], 'url': item['iconUrls']['medium']} for item in response.json()['items']]
-            df = pl.DataFrame(parsed_data)
-
-            return df
-            
+    '''Function to query data warehouse raw table for cards and their images'''
+    with init_connection() as conn:
+        df = conn.sql('SELECT * FROM raw.card_images_reference').pl()
+    return df
 
 def most_common_cards(grouping: str) -> px.bar:
     with init_connection() as conn:
@@ -124,7 +116,7 @@ def get_card_info() -> pl.DataFrame:
         query = 'SELECT * FROM card_dim'
         df = conn.sql(query=query).pl()
 
-    df = df.join(other=cr_card_images(), left_on='card_name', right_on='Card Name')
+    df = df.join(other=cr_card_images(), on='card_name')
     return df
 
 def card_appearances_by_elixir_cost() -> px.scatter:
