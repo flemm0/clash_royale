@@ -13,6 +13,7 @@ clash_royale_etl_project/assets/api.py
 clash_royale_etl_project/assets/cards.py
 clash_royale_etl_project/assets/clans.py
 clash_royale_etl_project/assets/constants.py
+clash_royale_etl_project/assets/dbt_assets.py
 clash_royale_etl_project/assets/ladder_battles.py
 clash_royale_etl_project/assets/players.py
 clash_royale_etl_project/assets/seasons.py
