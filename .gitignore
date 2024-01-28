@@ -9,3 +9,10 @@ data_model.mmd
 *.py[cod]
 
 .streamlit/
+
+# PyPI files
+bin/
+include/
+lib/
+lib64
+pyvenv.cfg
