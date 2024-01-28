@@ -48,7 +48,7 @@ The screenshot below depicts the DAG that I have written in the Dagster framewor
 
 ## Analytics App
 
-This project wouldn't be an end-to-end analytics engineering project without an analytics dashboard that shows what insights can be derived from the data warehouse. I have developed a quick dashboard using the [Streamlit](https://streamlit.io/) library in Python and hosted it on Streamlit Community Cloud for anyone to view. Click [here](https://clashroyale.streamlit.app/) to view the app. (Once you have navigated to the app's url I suggest clicking on the three buttons on the top right corner, clicking on "settings" and then turning on wide mode for a better viewing experience.)
+This project wouldn't be an end-to-end analytics engineering project without an analytics dashboard that shows what insights can be derived from the data warehouse. I have developed a quick dashboard using the [Streamlit](https://streamlit.io/) library in Python and hosted it on Streamlit Community Cloud for anyone to view. Click [here](https://clashroyale.streamlit.app/) to view the app. (Once you have navigated to the app's url I suggest clicking on the three buttons on the top right corner, clicking on "settings" and then turning on wide mode for a better viewing experience.) Additionally, I developed a quick dashboard using Power BI, click [here](https://github.com/flemm0/clash_royale/blob/main/clash_royale_dashboard.pbix) to download.
 
 ## Database Sharing
 
