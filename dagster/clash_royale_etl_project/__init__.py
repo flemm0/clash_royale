@@ -11,14 +11,14 @@ from .jobs import daily_fact_table_update
 
 from dagster_dbt import DbtCliResource
 
-
+import os
 
 python_assets = load_assets_from_modules([cards, clans, seasons, players])
 dbt_assets = load_assets_from_modules([dbt_assets])
 
 all_jobs = [daily_fact_table_update]
 
-all_schedules = [daily_fact_table_update]
+all_schedules = [fact_table_update_schedule]
 
 defs = Definitions(
     assets=[*python_assets, *dbt_assets],
