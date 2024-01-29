@@ -23,7 +23,7 @@ The data is sourced from the official [Clash Royale API](https://developer.clash
 
 ## Tools/Technologies
 
-In the interest of keeping costs to a minimum, I opted for open-source tools. The data extraction and loading is written in Python. For my data warehouse I am using [MotherDuck](https://motherduck.com/), a cloud-hosted DuckDB platform. For data transformations, I am using [dbt](https://www.getdbt.com/). Finally, I am using [Dagster](https://dagster.io/) to orchestrate everything in the ELT process. The logic for the orchestration can be mostly found [here](https://github.com/flemm0/clash_royale/tree/main/dagster/clash_royale_etl_project)
+In the interest of keeping costs to a minimum, I opted for open-source tools. The data extraction and loading is written in Python. For my data warehouse I am using [MotherDuck](https://motherduck.com/), a cloud-hosted DuckDB platform. For data transformations, I am using [dbt](https://www.getdbt.com/). Finally, I am using [Dagster](https://dagster.io/) to orchestrate everything in the ELT process. The logic for the orchestration can be mostly found [here](https://github.com/flemm0/clash_royale/tree/main/dagster/clash_royale_etl_project). For hosting the orchestration process, I am using a small instance of an Azure Linux VM, which will allow for my scheduled jobs (such as updating the fact table daily) to run.
 
 ## Data Model
 
