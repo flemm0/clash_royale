@@ -16,9 +16,9 @@ import os
 python_assets = load_assets_from_modules([cards, clans, seasons, players])
 dbt_assets = load_assets_from_modules([dbt_assets])
 
-all_jobs = [daily_fact_table_update, season_update_schedule]
+all_jobs = [daily_fact_table_update, monthly_season_update]
 
-all_schedules = [fact_table_update_schedule, monthly_season_update]
+all_schedules = [fact_table_update_schedule, season_update_schedule]
 
 defs = Definitions(
     assets=[*python_assets, *dbt_assets],
