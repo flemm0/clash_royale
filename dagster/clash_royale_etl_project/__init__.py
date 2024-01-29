@@ -5,9 +5,9 @@ from .assets import players, cards, clans, seasons, dbt_assets, constants
 
 from .resources import database_resource
 
-from .schedules import fact_table_update_schedule
+from .schedules import fact_table_update_schedule, season_update_schedule
 
-from .jobs import daily_fact_table_update
+from .jobs import daily_fact_table_update, monthly_season_update
 
 from dagster_dbt import DbtCliResource
 
@@ -16,9 +16,9 @@ import os
 python_assets = load_assets_from_modules([cards, clans, seasons, players])
 dbt_assets = load_assets_from_modules([dbt_assets])
 
-all_jobs = [daily_fact_table_update]
+all_jobs = [daily_fact_table_update, season_update_schedule]
 
-all_schedules = [fact_table_update_schedule]
+all_schedules = [fact_table_update_schedule, monthly_season_update]
 
 defs = Definitions(
     assets=[*python_assets, *dbt_assets],
