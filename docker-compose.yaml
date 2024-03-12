@@ -40,6 +40,7 @@ services:
       - dagster_network
     volumes:
       - ./dagster:/opt/dagster/app
+      - .dbt:/root/.dbt
 
   # This service runs dagster-webserver, which loads your user code from the user code container.
   # Since our instance uses the QueuedRunCoordinator, any runs submitted from the webserver will be put on
