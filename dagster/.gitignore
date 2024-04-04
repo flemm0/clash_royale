@@ -1,3 +1,4 @@
 .env
 tmp*/
 *.py[cod]
+*.egg-info
