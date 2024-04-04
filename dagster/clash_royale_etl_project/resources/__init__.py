@@ -1,5 +1,8 @@
 from dagster_duckdb import DuckDBResource
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 motherduck_token = os.getenv('MOTHERDUCK_TOKEN')
 
